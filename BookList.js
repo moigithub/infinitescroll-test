@@ -1,47 +1,39 @@
-import React  from 'react';
+import React from 'react';
 import throttle from 'lodash.throttle'
+import { FixedSizeList } from "react-window"
+import InfiniteLoader from "react-window-infinite-loader"
 import Book from './Book.js'
 
-let lastValue = 0, isDown
-
 const BookList = ({ books, onLoadMore }) => {
+  // const listRef = React.createRef()
+  const isItemLoaded = (index) => index < books.length - 1
 
-  const handleScroll = (event) => {
-    event.persist()
-    throttledHandleScroll(event.target)
-  }
-
-  let throttledHandleScroll = (target)=>{
-    if (lastValue > target.scrollTop) {
-      isDown = false
-    } else if (lastValue < target.scrollTop) {
-      isDown = true
-    }
-
-    lastValue = target.scrollTop
-
-    if (isDown &&
-       target.scrollTop+ target.clientHeight  >=
-       target.scrollHeight- ( target.clientHeight/3)
-    ) {
-      onLoadMore(isDown )
-    } else if(!isDown && target.scrollTop < 200){
-      onLoadMore(isDown )
-    }
-  }
-   throttledHandleScroll = throttle(throttledHandleScroll , 500)
 
   return (
     <div >
       <h2>Books</h2>
-      <ul className="booklist" onScroll={ handleScroll}  
+      <InfiniteLoader
+        isItemLoaded={isItemLoaded}
+        itemCount={books.length}
+        loadMoreItems={onLoadMore}
       >
-        {books.map( book => (
-          <Book key={book.id} book={book} />
-        ))}
-      </ul>
+        {({ onItemsRendered, ref }) => (
+          <FixedSizeList
+            ref={ref}
+            className="List"
+            height={400}
+            itemData={books}
+            itemCount={books.length}
+            itemSize={35}
+            width={300}
+            onItemsRendered={onItemsRendered}
+          >
+            {Book}
+          </FixedSizeList>
+        )}
+      </InfiniteLoader>
     </div>
   )
 }
 
- export default BookList
+export default BookList

@@ -4,7 +4,7 @@ import gql from "graphql-tag"
 
 import BookList from './BookList'
 
-const COUNT = 100
+const COUNT = 100 
 const KEEP_PAGES = 2
 const MAX_BUFFER = COUNT * KEEP_PAGES //5 pages
 
@@ -18,28 +18,17 @@ const GET_BOOKS = gql`
 let page = 0
 
 const BooksQuery = (props) => {
-  const loadMore = (fetchMore) => (isDown) => {
-    if (!isDown && page < KEEP_PAGES) return
-
+  const loadMore = (fetchMore) => (startIndex, stopIndex) => {
+    console.log("load more....",startIndex, stopIndex)
     fetchMore({
       variables: {
-        page: isDown ? ++page : --page-KEEP_PAGES+1,
+        page:  ++page,
         count: COUNT
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
-
-        let buffer
-        if (isDown) {
-          buffer = [...prev.books, ...fetchMoreResult.books].slice(-MAX_BUFFER)
-        } else {
-          buffer = [...fetchMoreResult.books, ...prev.books].slice(0, MAX_BUFFER)
-        }
-
-    console.log("page",page,"buffer", buffer[0], buffer[buffer.length-1])
-
         return Object.assign({}, prev, {
-          books: buffer
+          books: [...prev.books, ...fetchMoreResult.books]
         })
 
       }
