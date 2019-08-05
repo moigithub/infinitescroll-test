@@ -4,7 +4,7 @@ import gql from "graphql-tag"
 
 import BookList from './BookList'
 
-const COUNT = 100 
+const COUNT = 100
 const KEEP_PAGES = 2
 const MAX_BUFFER = COUNT * KEEP_PAGES //5 pages
 
@@ -19,10 +19,9 @@ let page = 0
 
 const BooksQuery = (props) => {
   const loadMore = (fetchMore) => (startIndex, stopIndex) => {
-    console.log("load more....",startIndex, stopIndex)
     fetchMore({
       variables: {
-        page:  ++page,
+        page: ++page,
         count: COUNT
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -43,6 +42,7 @@ const BooksQuery = (props) => {
         if (error) return `Error! ${error.message}`
         return (
           <div  >
+            <h2>Books</h2>
             <BookList
               books={data.books}
               onLoadMore={loadMore(fetchMore)} />

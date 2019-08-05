@@ -7,14 +7,12 @@
     "apollo-client": "2.6.3",
     "graphql": "14.4.2",
     "graphql-tag": "2.10.1",
-    "lodash": "^4.17.15",
-    "lodash.throttle": "4.1.1",
     "react": "16.8.6",
     "react-apollo": "2.5.8",
     "react-dom": "16.8.6",
+    "react-resize-detector": "^4.2.0",
     "react-window": "^1.8.5",
-    "react-window-infinite-loader": "^1.0.3",
-    "react-window-size": "^1.2.2"
+    "react-window-infinite-loader": "^1.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
